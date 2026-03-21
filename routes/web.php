@@ -26,8 +26,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebController::class, 'index'])->name('inicio');
-Route::name('solicitudWeb.store')->post('solicitudWeb/store', [SolicitudWebController::class, 'store']);
-Route::name('reclamo.store')->post('reclamo/store', [ReclamoController::class, 'store']);
+if (class_exists(SolicitudWebController::class)) {
+    Route::name('solicitudWeb.store')->post('solicitudWeb/store', [SolicitudWebController::class, 'store']);
+}
+if (class_exists(ReclamoController::class)) {
+    Route::name('reclamo.store')->post('reclamo/store', [ReclamoController::class, 'store']);
+}
 
 Auth::routes();
 
@@ -37,9 +41,11 @@ Route::group(['middleware' => ['auth', 'activo']], function () {
     Route::name('usuario.password')->post('usuario/password', [InicioController::class, 'password']);
 
     //______________________ CONFIGURACIONES
-    Route::group(['middleware' => ['permission:CONFIGURACION']], function () {
-        Route::resource('configuracion', ConfiguracionController::class);
-    });
+    if (class_exists(ConfiguracionController::class)) {
+        Route::group(['middleware' => ['permission:CONFIGURACION']], function () {
+            Route::resource('configuracion', ConfiguracionController::class);
+        });
+    }
 
     //______________________ USUARIOS
     Route::group(['middleware' => ['permission:USUARIOS']], function () {
@@ -51,7 +57,6 @@ Route::group(['middleware' => ['auth', 'activo']], function () {
 
     //______________________ ROLES_PERMISOS
     Route::group(['middleware' => ['permission:ROLES_PERMISOS']], function () {
-        Route::resource('rol', RoleController::class);
         Route::resource('rol', RoleController::class);
         Route::name('rol.busca')->post('rol/busca', [RoleController::class, 'busca']);
         Route::name('rol.update')->post('rol/update', [RoleController::class, 'update']);
@@ -136,77 +141,95 @@ Route::group(['middleware' => ['auth', 'activo']], function () {
     });
 
     //______________________ MATERIALES
-    Route::group(['middleware' => ['permission:MATERIALES']], function () {
-        Route::name('material.agregaStock')->post('material/agregaStock', [MaterialController::class, 'agregaStock']);
-        Route::name('material.actualiza')->post('material/actualiza', [MaterialController::class, 'actualiza']);
-        Route::resource('material', MaterialController::class);
-    });
+    if (class_exists(MaterialController::class)) {
+        Route::group(['middleware' => ['permission:MATERIALES']], function () {
+            Route::name('material.agregaStock')->post('material/agregaStock', [MaterialController::class, 'agregaStock']);
+            Route::name('material.actualiza')->post('material/actualiza', [MaterialController::class, 'actualiza']);
+            Route::resource('material', MaterialController::class);
+        });
+    }
 
     //______________________ SOLICITUDES
-    Route::group(['middleware' => ['permission:SOLICITUDES']], function () {
-        Route::get('solicitudes/sucursal/{id_suc}', [SolicitudController::class, 'solicitudes']);
-        Route::get('solicitud/atender/{id_sol}', [SolicitudController::class, 'atender']);
-        Route::get('material/buscaMaterial/{id_mat}', [MaterialController::class, 'buscaMaterial']);
-        Route::name('solicitud.enviar')->post('solicitud/enviar', [SolicitudController::class, 'enviar']);
-        Route::name('solicitud.recepcion')->post('solicitud/recepcion', [SolicitudController::class, 'recepcion']);
-        Route::name('solicitud.elimina')->post('solicitud/elimina', [SolicitudController::class, 'elimina']);
-        Route::resource('solicitud', SolicitudController::class);
-    });
+    if (class_exists(SolicitudController::class) && class_exists(MaterialController::class)) {
+        Route::group(['middleware' => ['permission:SOLICITUDES']], function () {
+            Route::get('solicitudes/sucursal/{id_suc}', [SolicitudController::class, 'solicitudes']);
+            Route::get('solicitud/atender/{id_sol}', [SolicitudController::class, 'atender']);
+            Route::get('material/buscaMaterial/{id_mat}', [MaterialController::class, 'buscaMaterial']);
+            Route::name('solicitud.enviar')->post('solicitud/enviar', [SolicitudController::class, 'enviar']);
+            Route::name('solicitud.recepcion')->post('solicitud/recepcion', [SolicitudController::class, 'recepcion']);
+            Route::name('solicitud.elimina')->post('solicitud/elimina', [SolicitudController::class, 'elimina']);
+            Route::resource('solicitud', SolicitudController::class);
+        });
+    }
 
     //______________________ GASTOS
-    Route::group(['middleware' => ['permission:GASTOS']], function () {
-        Route::get('gastos/sucursal/{id_suc}/{fecha}', [GastoController::class, 'gastos']);
-        Route::get('gasto/pdf/{id_gas}', [GastoController::class, 'pdfGasto']);
-        Route::name('gasto.elimina')->post('gasto/elimina', [GastoController::class, 'elimina']);
-        Route::resource('gasto', GastoController::class);
-    });
+    if (class_exists(GastoController::class)) {
+        Route::group(['middleware' => ['permission:GASTOS']], function () {
+            Route::get('gastos/sucursal/{id_suc}/{fecha}', [GastoController::class, 'gastos']);
+            Route::get('gasto/pdf/{id_gas}', [GastoController::class, 'pdfGasto']);
+            Route::name('gasto.elimina')->post('gasto/elimina', [GastoController::class, 'elimina']);
+            Route::resource('gasto', GastoController::class);
+        });
+    }
 
     //______________________ REPORTES
-    Route::group(['middleware' => ['permission:REPORTES']], function () {
-        Route::name('reporte.ingreso_egreso')->post('reporte/ingreso_egreso', [ReporteController::class, 'ingreso_egreso']);
-        Route::get('reporte/pdf/ingreso_egreso_detalle/{tipo}/{id_suc}/{fec_ini}/{fec_fin}/{mes}/{anio_m}/{anio_a}', [ReporteController::class, 'pdf_ingreso_egreso_detalle']);
-        Route::get('reporte/pdf/ingreso_egreso/{tipo}/{id_suc}/{fec_ini}/{fec_fin}/{mes}/{anio_m}/{anio_a}', [ReporteController::class, 'pdf_ingreso_egreso']);
+    if (class_exists(ReporteController::class)) {
+        Route::group(['middleware' => ['permission:REPORTES']], function () {
+            Route::name('reporte.ingreso_egreso')->post('reporte/ingreso_egreso', [ReporteController::class, 'ingreso_egreso']);
+            Route::get('reporte/pdf/ingreso_egreso_detalle/{tipo}/{id_suc}/{fec_ini}/{fec_fin}/{mes}/{anio_m}/{anio_a}', [ReporteController::class, 'pdf_ingreso_egreso_detalle']);
+            Route::get('reporte/pdf/ingreso_egreso/{tipo}/{id_suc}/{fec_ini}/{fec_fin}/{mes}/{anio_m}/{anio_a}', [ReporteController::class, 'pdf_ingreso_egreso']);
 
-        Route::name('reporte.clientes')->post('reporte/clientes', [ReporteController::class, 'clientes']);
-        Route::get('reporte/pdf/clientes/{id_suc}/{tipo}', [ReporteController::class, 'clientes_pdf']);
+            Route::name('reporte.clientes')->post('reporte/clientes', [ReporteController::class, 'clientes']);
+            Route::get('reporte/pdf/clientes/{id_suc}/{tipo}', [ReporteController::class, 'clientes_pdf']);
 
-        Route::name('reporte.ingresos_egresos_total')->post('reporte/ingresos_egresos_total', [ReporteController::class, 'ingresos_egresos_total']);
+            Route::name('reporte.ingresos_egresos_total')->post('reporte/ingresos_egresos_total', [ReporteController::class, 'ingresos_egresos_total']);
 
-        Route::name('reporte.mes_ingreso')->post('reporte/mes_ingreso', [ReporteController::class, 'mes_ingreso']);
-        Route::name('reporte.puntualesDeudoresBody')->post('reporte/puntualesDeudoresBody', [ReporteController::class, 'puntualesDeudoresBody']);
+            Route::name('reporte.mes_ingreso')->post('reporte/mes_ingreso', [ReporteController::class, 'mes_ingreso']);
+            Route::name('reporte.puntualesDeudoresBody')->post('reporte/puntualesDeudoresBody', [ReporteController::class, 'puntualesDeudoresBody']);
 
-        Route::get('reporte/pdf/cliente/{id_cli}', [ReporteController::class, 'informacion_pdf']);
+            Route::get('reporte/pdf/cliente/{id_cli}', [ReporteController::class, 'informacion_pdf']);
 
-        Route::resource('reporte', ReporteController::class);
-    });
+            Route::resource('reporte', ReporteController::class);
+        });
+    }
 
     //______________________ ALERTAS
-    Route::group(['middleware' => ['permission:ALERTAS']], function () {
-        Route::name('alerta.deudores')->post('alerta/deudores', [AlertaController::class, 'deudores']);
-        Route::get('alerta/deudores/{id_suc}', [AlertaController::class, 'pdf_deudores']);
-        Route::get('alerta/asignados/{id_suc}', [AlertaController::class, 'pdf_asignados']);
-        Route::resource('alerta', AlertaController::class);
-    });
+    if (class_exists(AlertaController::class)) {
+        Route::group(['middleware' => ['permission:ALERTAS']], function () {
+            Route::name('alerta.deudores')->post('alerta/deudores', [AlertaController::class, 'deudores']);
+            Route::get('alerta/deudores/{id_suc}', [AlertaController::class, 'pdf_deudores']);
+            Route::get('alerta/asignados/{id_suc}', [AlertaController::class, 'pdf_asignados']);
+            Route::resource('alerta', AlertaController::class);
+        });
+    }
 
     //______________________ ASIGNACION
-    Route::group(['middleware' => ['permission:ASIGNACIONES']], function () {
-        Route::get('asignacion/clientes/pendientes/{id_suc}', [AsignacionController::class, 'clientes_pendientes']);
-        Route::name('asignacion.asigna')->post('asignacion/asigna', [AsignacionController::class, 'asigna']);
-        Route::get('asignacion/pdf/{id_con}', [AsignacionController::class, 'pdf_asignacion']);
-        Route::get('asignaciones/pdf/{id_suc}', [AsignacionController::class, 'pdf_asignaciones']);
-        Route::resource('asignacion', AsignacionController::class);
-    });
+    if (class_exists(AsignacionController::class)) {
+        Route::group(['middleware' => ['permission:ASIGNACIONES']], function () {
+            Route::get('asignacion/clientes/pendientes/{id_suc}', [AsignacionController::class, 'clientes_pendientes']);
+            Route::name('asignacion.asigna')->post('asignacion/asigna', [AsignacionController::class, 'asigna']);
+            Route::get('asignacion/pdf/{id_con}', [AsignacionController::class, 'pdf_asignacion']);
+            Route::get('asignaciones/pdf/{id_suc}', [AsignacionController::class, 'pdf_asignaciones']);
+            Route::resource('asignacion', AsignacionController::class);
+        });
+    }
 
     //______________________ WEB
     Route::group(['middleware' => ['permission:WEB']], function () {
-        Route::get('/solicitudWeb', [SolicitudWebController::class, 'index']);
-        Route::get('web/solicitudes/{id_suc}', [SolicitudWebController::class, 'solicitudes']);
+        if (class_exists(SolicitudWebController::class)) {
+            Route::get('/solicitudWeb', [SolicitudWebController::class, 'index']);
+            Route::get('web/solicitudes/{id_suc}', [SolicitudWebController::class, 'solicitudes']);
+        }
 
-        Route::get('/reclamo', [ReclamoController::class, 'index']);
-        Route::get('web/reclamos/{id_suc}', [ReclamoController::class, 'reclamos']);
-        Route::name('reclamo.atender')->post('reclamo/atender', [ReclamoController::class, 'atender']);
+        if (class_exists(ReclamoController::class)) {
+            Route::get('/reclamo', [ReclamoController::class, 'index']);
+            Route::get('web/reclamos/{id_suc}', [ReclamoController::class, 'reclamos']);
+            Route::name('reclamo.atender')->post('reclamo/atender', [ReclamoController::class, 'atender']);
+        }
     });
 
-    Route::resource('excel', BulkController::class);
+    if (class_exists(BulkController::class)) {
+        Route::resource('excel', BulkController::class);
+    }
 });
 
