@@ -34,7 +34,8 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        // Allow viewing the login form even if a stale/authenticated session exists.
+        $this->middleware('guest')->except(['logout', 'showLoginForm']);
         $this->middleware('auth')->only('logout');
     }
 
