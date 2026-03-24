@@ -25,16 +25,18 @@ class AsignacionController extends Controller
     public function clientes_pendientes($id_suc)
     {
         $sucursal = Sucursal::find($id_suc);
-        $pendientes = Cliente::join('contrato', 'contrato.ID_CLI', '=', 'cliente.ID_CLI')
+        $pendientes = Contrato::join('cliente', 'cliente.ID_CLI', '=', 'contrato.ID_CLI')
             ->where('cliente.ID_SUC', $id_suc)
-            ->where('EST_CON', 'PENDIENTE')
+            ->where('contrato.EST_CON', 'PENDIENTE')
+            ->select('contrato.*', 'cliente.NOM_CLI', 'cliente.APE_CLI', 'cliente.DIR_CLI', 'cliente.COD_CLI')
             ->get();
-
-        $asignados = Cliente::join('contrato', 'contrato.ID_CLI', '=', 'cliente.ID_CLI')
+        
+        $asignados = Contrato::join('cliente', 'cliente.ID_CLI', '=', 'contrato.ID_CLI')
             ->where('cliente.ID_SUC', $id_suc)
-            ->where('EST_CON', 'ASIGNADO')
+            ->where('contrato.EST_CON', 'ASIGNADO')
+            ->select('contrato.*', 'cliente.NOM_CLI', 'cliente.APE_CLI', 'cliente.DIR_CLI', 'cliente.COD_CLI')
             ->get();
-
+            
         return view('asignacion.parcial.clientes_pendientes', compact('sucursal', 'pendientes', 'asignados'))->render();
     }
 
