@@ -25,7 +25,7 @@ use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [WebController::class, 'index'])->name('inicio');
+Route::get('/', [WebController::class, 'index'])->name('web.inicio');
 if (class_exists(SolicitudWebController::class)) {
     Route::name('solicitudWeb.store')->post('solicitudWeb/store', [SolicitudWebController::class, 'store']);
 }
