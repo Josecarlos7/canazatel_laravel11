@@ -122,20 +122,20 @@
 
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="@yield('inicio')"><a class="a-li" href="{{ url('/inicio') }}"><i class="fa fa-home"></i> <span>INICIO</span></a></li>
-                <li class="@yield('configuracion')"><a class="a-li" href="{{ url('/configuracion') }}"><i class="fa fa-cog"></i> <span>CONFIGURACION</span></a></li>
-                <li class="@yield('usuario')"><a class="a-li" href="{{ url('/usuario') }}"><i class="fa fa-user"></i> <span>USUARIOS</span></a></li>
-                <li class="@yield('rol')"><a class="a-li" href="{{ url('/rol') }}"><i class="fa fa-random"></i> <span>ROLES Y PERMISOS</span></a></li>
-                <li class="@yield('localidad')"><a class="a-li" href="{{ url('/localidad') }}"><i class="fa fa-map-o"></i> <span>LOCALIDADES</span></a></li>
-                <li class="@yield('sucursal')"><a class="a-li" href="{{ url('/sucursal') }}"><i class="fa fa-university"></i> <span>SUCURSALES</span></a></li>
-                <li class="@yield('plan')"><a class="a-li" href="{{ url('/plan') }}"><i class="fa fa-cubes"></i> <span>PLANES</span></a></li>
-                <li class="@yield('canal')"><a class="a-li" href="{{ url('/canal') }}"><i class="fa fa-cube"></i> <span>CANALES</span></a></li>
-                <li class="@yield('cliente')"><a class="a-li" href="{{ url('/cliente') }}"><i class="fa fa-users"></i> <span>CLIENTES</span></a></li>
-                <li class="@yield('material')"><a class="a-li" href="{{ url('/material') }}"><i class="fa fa-tags"></i> <span>MATERIALES</span></a></li>
-                <li class="@yield('solicitud')"><a class="a-li" href="{{ url('/solicitud') }}"><i class="fa fa-share-alt"></i> <span>SOLICITUDES</span></a></li>
-                <li class="@yield('gasto')"><a class="a-li" href="{{ url('/gasto') }}"><i class="fa fa-shopping-cart"></i> <span>GASTOS</span></a></li>
-                <li class="@yield('reporte')"><a class="a-li" href="{{ url('/reporte') }}"><i class="fa fa-copy"></i> <span>REPORTES</span></a></li>
-                <li class="@yield('alerta')"><a class="a-li" href="{{ url('/alerta') }}"><i class="fa fa-exclamation-triangle"></i> <span>ALERTAS</span></a></li>
-                <li class="@yield('asignacion')"><a class="a-li" href="{{ url('/asignacion') }}"><i class="fa fa-check-square-o"></i> <span>ASIGNAR TECNICOS</span></a></li>
+                @can('CONFIGURACION')<li class="@yield('configuracion')"><a class="a-li" href="{{ url('/configuracion') }}"><i class="fa fa-cog"></i> <span>CONFIGURACION</span></a></li>@endcan
+                @can('USUARIOS')<li class="@yield('usuario')"><a class="a-li" href="{{ url('/usuario') }}"><i class="fa fa-user"></i> <span>USUARIOS</span></a></li>@endcan
+                @can('ROLES_PERMISOS')<li class="@yield('rol')"><a class="a-li" href="{{ url('/rol') }}"><i class="fa fa-random"></i> <span>ROLES Y PERMISOS</span></a></li>@endcan
+                @can('LOCALIDADES')<li class="@yield('localidad')"><a class="a-li" href="{{ url('/localidad') }}"><i class="fa fa-map-o"></i> <span>LOCALIDADES</span></a></li>@endcan
+                @can('SUCURSALES')<li class="@yield('sucursal')"><a class="a-li" href="{{ url('/sucursal') }}"><i class="fa fa-university"></i> <span>SUCURSALES</span></a></li>@endcan
+                @can('PLANES')<li class="@yield('plan')"><a class="a-li" href="{{ url('/plan') }}"><i class="fa fa-cubes"></i> <span>PLANES</span></a></li>@endcan
+                @can('CANALES')<li class="@yield('canal')"><a class="a-li" href="{{ url('/canal') }}"><i class="fa fa-cube"></i> <span>CANALES</span></a></li>@endcan
+                @can('CLIENTES')<li class="@yield('cliente')"><a class="a-li" href="{{ url('/cliente') }}"><i class="fa fa-users"></i> <span>CLIENTES</span></a></li>@endcan
+                @can('MATERIALES')<li class="@yield('material')"><a class="a-li" href="{{ url('/material') }}"><i class="fa fa-tags"></i> <span>MATERIALES</span></a></li>@endcan
+                @can('SOLICITUDES')<li class="@yield('solicitud')"><a class="a-li" href="{{ url('/solicitud') }}"><i class="fa fa-share-alt"></i> <span>SOLICITUDES</span></a></li>@endcan
+                @can('GASTOS')<li class="@yield('gasto')"><a class="a-li" href="{{ url('/gasto') }}"><i class="fa fa-shopping-cart"></i> <span>GASTOS</span></a></li>@endcan
+                @can('REPORTES')<li class="@yield('reporte')"><a class="a-li" href="{{ url('/reporte') }}"><i class="fa fa-copy"></i> <span>REPORTES</span></a></li>@endcan
+                @can('ALERTAS')<li class="@yield('alerta')"><a class="a-li" href="{{ url('/alerta') }}"><i class="fa fa-exclamation-triangle"></i> <span>ALERTAS</span></a></li>@endcan
+                @can('ASIGNACIONES')<li class="@yield('asignacion')"><a class="a-li" href="{{ url('/asignacion') }}"><i class="fa fa-check-square-o"></i> <span>ASIGNAR TECNICOS</span></a></li>@endcan
                 @can('WEB')
                 <li class="treeview @yield('menu-open')">
                     <a class="a-li" href="#">
