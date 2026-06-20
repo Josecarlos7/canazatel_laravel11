@@ -208,6 +208,7 @@ Route::group(['middleware' => ['auth', 'activo']], function () {
         Route::group(['middleware' => ['permission:ASIGNACIONES']], function () {
             Route::get('asignacion/clientes/pendientes/{id_suc}', [AsignacionController::class, 'clientes_pendientes']);
             Route::name('asignacion.asigna')->post('asignacion/asigna', [AsignacionController::class, 'asigna']);
+            Route::name('asignacion.elimina')->post('asignacion/elimina', [AsignacionController::class, 'elimina']);
             Route::get('asignacion/pdf/{id_con}', [AsignacionController::class, 'pdf_asignacion']);
             Route::get('asignaciones/pdf/{id_suc}', [AsignacionController::class, 'pdf_asignaciones']);
             Route::resource('asignacion', AsignacionController::class);

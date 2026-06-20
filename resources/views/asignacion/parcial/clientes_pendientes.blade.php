@@ -16,6 +16,9 @@
                             <th>DATOS</th>
                             <th>FECHA|HORA SOLICITUD</th>
                             <th>DATOS</th>
+                            @hasanyrole('ADMINISTRADOR|SUPER_ADMIN')
+                            <th>·</th>
+                            @endhasanyrole
                         </tr>
                     </thead>
                     <tbody>
@@ -33,6 +36,13 @@
                             <td>
                                 <textarea class="form-control" name="descripcion[]" id="txt_{{ $cliente->ID_CON }}" disabled>{{ $cliente->TXT_CON }}</textarea>
                             </td>
+                            @hasanyrole('ADMINISTRADOR|SUPER_ADMIN')
+                            <td class="text-center">
+                                <button class="btn btn-danger btn-sm" type="button" onclick="modalElimina({{ $sucursal->ID_SUC }}, {{ $cliente->ID_CON }});" title="Eliminar asignacion">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                            @endhasanyrole
                         </tr>
                         @endforeach
                     </tbody>
@@ -52,7 +62,7 @@
                         <th class="text-center">#</th>
                         <th>DATOS</th>
                         <th>FECHA|HORA SOLICITUD</th>
-                        <th>ACCIONES</th>
+                        <th>·</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,6 +79,11 @@
                         <td><i class="fa fa-calendar"></i> {{ $cliente->FEC_SOL }} <br> <i class="fa fa-clock-o"></i> {{ $cliente->HOR_SOL }}</td>
                         <td>
                             <a href="{{ url('asignacion/pdf/'.$cliente->ID_CON) }}" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-file"></i></a>
+                            @hasanyrole('ADMINISTRADOR|SUPER_ADMIN')
+                            <button class="btn btn-danger btn-sm" type="button" onclick="modalElimina({{ $sucursal->ID_SUC }}, {{ $cliente->ID_CON }});" title="Eliminar asignacion">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            @endhasanyrole
                         </td>
                     </tr>
                     @endforeach

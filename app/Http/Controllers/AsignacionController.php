@@ -57,6 +57,19 @@ class AsignacionController extends Controller
 
         return response()->json($request->id_suc);
     }
+    
+    public function elimina(Request $request)
+    {
+        $contrato = Contrato::find($request->input('id_con'));
+        if (! $contrato) {
+            return response()->json('Contrato no encontrado', 404);
+        }
+
+        $contrato->EST_CON = 'ELIMINADO';
+        $contrato->TXT_CON = null;
+        $contrato->save();
+        return response()->json($request->id_suc);
+    }
 
     public function pdf_asignacion($id_con)
     {
